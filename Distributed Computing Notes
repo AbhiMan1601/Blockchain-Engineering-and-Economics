@@ -55,3 +55,20 @@ only two can be satisfied simultaneously.
 
 Consistency model
 a contract between programmer and system, wherein the system guarantees that if the programmer follows some specific rules, the results of operations on the data store will be predictable
+
+Order:
+we can attach timestamps to unordered events to order them
+we can use timestamps to enforce a specific ordering of operations or the delivery of messages (for example, by delaying an operation if it arrives out of order)
+we can use the value of a timestamp to determine whether something happened chronologically before something else
+
+Interpretation - time as a universally comparable value. The absolute value of a timestamp can be interpreted as a date,
+which is useful for people. Given a timestamp of when a downtime started from a log file, you can tell that it was last Saturday, when there was a thunderstorm.
+
+Duration - durations measured in time have some relation to the real world. 
+Algorithms generally don't care about the absolute value of a clock or its interpretation as a date,but they might use durations to make some judgment calls. 
+In particular, the amount of time spent waiting can provide clues about whether a system is partitioned or merely experiencing high latency.
+
+A Lamport clock is simple. Each process maintains a counter using the following rules:
+Whenever a process does work, increment the counter
+Whenever a process sends a message, include the counter
+When a message is received, set the counter to max(local_counter, received_counter) + 1
