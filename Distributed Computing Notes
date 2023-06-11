@@ -1,0 +1,57 @@
+Some points on Distributed Systems from Distributed systems
+for fun and profit
+
+1. Scalability 
+2. Performance and Latency
+3. Availibity and Fault Tolerance 
+These metrics assess how useful a distributed system is
+
+System model - a set of assumptions about the environment and facilities on which a distributed system is implemented
+
+1. Nodes serve as hosts for computation and storage. They have:
+the ability to execute a program
+the ability to store data into volatile memory (which can be lost upon failure) and into stable state (which can be read after a failure)
+a clock (which may or may not be assumed to be accurate)
+
+2. Communication links in our system model
+Communication links connect individual nodes to each other, and allow messages to be sent in either direction. 
+Many books that discuss distributed algorithms assume that there are individual links between each pair of nodes, 
+that the links provide FIFO (first in, first out) order for messages, that they can only deliver messages that were sent, and that sent messages can be lost.
+Some algorithms assume that the network is reliable: that messages are never lost and never delayed indefinitely. 
+This may be a reasonable assumption for some real-world settings, but in general it is preferable to consider the network to be unreliable and subject to message loss and delays.
+
+3. Timing 
+- Synchronous system model
+Processes execute in lock-step; there is a known upper bound on message transmission delay; each process has an accurate clock
+- Asynchronous system model
+No timing assumptions - e.g. processes execute at independent rates; there is no bound on message transmission delay; useful clocks do not exist
+
+It is easier to solve problems in the synchronous system model, because assumptions about execution speeds, maximum message transmission delays and clock accuracy all help in 
+solving problems since you can make inferences based on those assumptions and rule out inconvenient failure scenarios by assuming they never occur.
+
+4. Consensus Problem
+Several computers (or nodes) achieve consensus if they all agree on some value. More formally:
+
+Agreement: Every correct process must agree on the same value.
+Integrity: Every correct process decides at most one value, and if it decides some value, then it must have been proposed by some process.
+Termination: All processes eventually reach a decision.
+Validity: If all correct processes propose the same value V, then all correct processes decide V.
+
+FLP Impossibility Result : "there does not exist a (deterministic) algorithm for the consensus problem in an asynchronous system subject to failures, even if messages can never be lost, at most one process may fail, and it can only fail by crashing (stopping executing)".
+This result means that there is no way to solve the consensus problem under a very minimal system model in a way that cannot be delayed forever. The argument is that if such an algorithm existed, then one could devise an execution of that algorithm in which it would
+remain undecided ("bivalent") for an arbitrary amount of time by delaying message delivery - which is allowed in the asynchronous system model. 
+Thus, such an algorithm cannot exist.
+algorithms that solve the consensus problem must either give up safety or liveness when the guarantees regarding bounds on message delivery do not hold.
+
+CAP Theorem : The theorem states that of these three properties:
+Consistency: all nodes see the same data at the same time.
+Availability: node failures do not prevent survivors from continuing to operate.
+Partition tolerance: the system continues to operate despite message loss due to network and/or node failure
+only two can be satisfied simultaneously. 
+- many system designs used in early distributed relational database systems did not take into account partition tolerance
+- there is a tension between strong consistency and high availability during network partitions
+- there is a tension between strong consistency and performance in normal operation.
+- if we do not want to give up availability during a network partition, then we need to explore whether consistency models other than strong consistency are workable for our purposes.
+
+Consistency model
+a contract between programmer and system, wherein the system guarantees that if the programmer follows some specific rules, the results of operations on the data store will be predictable
