@@ -72,3 +72,25 @@ A Lamport clock is simple. Each process maintains a counter using the following 
 Whenever a process does work, increment the counter
 Whenever a process sends a message, include the counter
 When a message is received, set the counter to max(local_counter, received_counter) + 1
+
+P2c. For any v and n, if a proposal with value v and number n is issued [by a leader], then there is a set S consisting of a majority of acceptors [followers] such that either (a) no acceptor 
+in S has accepted any proposal numbered less than n, or (b) v is the value of the highest-numbered proposal among all proposals numbered less than n accepted by the followers in S.
+
+Primary/Backup
+Single, static master
+Replicated log, slaves are not involved in executing operations
+No bounds on replication delay
+Not partition tolerant
+Manual/ad-hoc failover, not fault tolerant, "hot backup"
+
+2PC
+Unanimous vote: commit or abort
+Static master
+2PC cannot survive simultaneous failure of the coordinator and a node during a commit
+Not partition tolerant, tail latency sensitive
+
+Paxos
+Majority vote
+Dynamic master
+Robust to n/2-1 simultaneous failures as part of protocol
+Less sensitive to tail latency
