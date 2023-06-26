@@ -1,0 +1,34 @@
+mpow(N, 1, _) ->
+.. N;
+.. mpow(N, K, M) ->
+.. mpow(K rem 2, N, K, M).
+ok
+8> mpow(0, N, K, M) ->
+.. X = mpow(N, K div 2, M),
+.. (X * X) rem M;
+.. mpow(_, N, K, M) ->
+.. X = mpow(N, K - 1, M),
+.. (X * N) rem M.
+ok
+9> fermat(1) ->
+.. ok;
+.. fermat(P) ->
+.. R = random:uniform(P-1),
+.. T = mpow(R,P-1,P),
+.. if
+.. T == 1 ->
+.. ok;
+.. true ->
+.. no
+.. end.
+ok
+10> test(_, 0) ->
+ .. ok;
+ .. test(P, N) ->
+ .. case fermat(P) of
+ .. ok ->
+ .. test(P, N-1);
+ .. no ->
+ .. no
+ .. end.
+ok
